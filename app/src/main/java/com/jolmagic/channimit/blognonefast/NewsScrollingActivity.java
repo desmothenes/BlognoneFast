@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -14,6 +16,7 @@ import com.crashlytics.android.Crashlytics;
 import com.einmalfel.earl.EarlParser;
 import com.einmalfel.earl.Feed;
 import com.einmalfel.earl.Item;
+import com.jolmagic.channimit.blognonefast.view.NewsHeadlineAdapter;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
@@ -27,6 +30,9 @@ import io.fabric.sdk.android.Fabric;
 
 public class NewsScrollingActivity extends AppCompatActivity {
     String TAG = " NewsScrollingActivity";
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +45,16 @@ public class NewsScrollingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_news_scrolling);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        mRecyclerView = (RecyclerView) findViewById(R.id.news_headline_in_main);
+
+        // use this setting to improve performance if you know that changes
+        // in content do not change the layout size of the RecyclerView
+        mRecyclerView.setHasFixedSize(true);
+
+        // use a linear layout manager
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
 
         Ion.with(getBaseContext())
                 .load("https://www.blognone.com/atom.xml")
@@ -53,6 +69,10 @@ public class NewsScrollingActivity extends AppCompatActivity {
                                 String title = item.getTitle();
                                 Log.i(TAG, "Item title: " + (title == null ? "N/A" : title));
                             }
+
+                            // specify an adapter (see also next example)
+                            mAdapter = new NewsHeadlineAdapter(feed.getItems());
+                            mRecyclerView.setAdapter(mAdapter);
                         } catch (XmlPullParserException | IOException | DataFormatException e) {
                             e.printStackTrace();
                         }
