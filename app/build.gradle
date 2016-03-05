@@ -17,22 +17,36 @@ repositories {
 
 
 android {
+    //noinspection GroovyAssignabilityCheck
+    signingConfigs {
+        config {
+            keyAlias 'channimit'
+            keyPassword 'blognonefast'
+            //noinspection GroovyAssignabilityCheck
+            storeFile file('../blognonefast.jks')
+            storePassword 'blognonefast'
+        }
+    }
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
-
     defaultConfig {
         applicationId "com.jolmagic.channimit.blognonefast"
         minSdkVersion 23
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+        signingConfig signingConfigs.config
     }
     //noinspection GroovyAssignabilityCheck
     buildTypes {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
+    }
+    //noinspection GroovyAssignabilityCheck
+    productFlavors {
     }
 }
 
