@@ -1,21 +1,16 @@
 package com.jolmagic.channimit.blognonefast;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.crashlytics.android.Crashlytics;
 import com.einmalfel.earl.EarlParser;
 import com.einmalfel.earl.Feed;
-import com.einmalfel.earl.Item;
 import com.jolmagic.channimit.blognonefast.view.NewsHeadlineAdapter;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -29,10 +24,9 @@ import java.util.zip.DataFormatException;
 import io.fabric.sdk.android.Fabric;
 
 public class NewsScrollingActivity extends AppCompatActivity {
+    @SuppressWarnings("unused")
     String TAG = " NewsScrollingActivity";
-    private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,16 +40,6 @@ public class NewsScrollingActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.news_headline_in_main);
-
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
-        mRecyclerView.setHasFixedSize(true);
-
-        // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-
         Ion.with(getBaseContext())
                 .load("https://www.blognone.com/atom.xml")
                 .asInputStream()
@@ -64,13 +48,11 @@ public class NewsScrollingActivity extends AppCompatActivity {
                     public void onCompleted(Exception ignore, InputStream result) {
                         try {
                             Feed feed = EarlParser.parseOrThrow(result, 0);
-                            Log.i(TAG, "Processing feed: " + feed.getTitle());
-                            for (Item item : feed.getItems()) {
-                                String title = item.getTitle();
-                                Log.i(TAG, "Item title: " + (title == null ? "N/A" : title));
-                            }
 
-                            // specify an adapter (see also next example)
+                            RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.news_headline_in_main);
+                            mRecyclerView.setHasFixedSize(true);
+                            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getBaseContext());
+                            mRecyclerView.setLayoutManager(mLayoutManager);
                             mAdapter = new NewsHeadlineAdapter(feed.getItems());
                             mRecyclerView.setAdapter(mAdapter);
                         } catch (XmlPullParserException | IOException | DataFormatException e) {
@@ -78,15 +60,6 @@ public class NewsScrollingActivity extends AppCompatActivity {
                         }
                     }
                 });
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
     }
 
     @Override
