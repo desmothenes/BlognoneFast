@@ -2,12 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.jolmagic.channimit.blognonefast">
+
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
+        android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:fullBackupContent="true"
         android:supportsRtl="false"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
@@ -21,9 +23,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="46d7189506e0993801267871563b41d8215e545f" />
+
+        <activity
+            android:name=".NodeScrollingActivity"
+            android:label="@string/title_activity_node_scrolling"
+            android:parentActivityName=".NewsScrollingActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.jolmagic.channimit.blognonefast.NewsScrollingActivity" />
+        </activity>
+        <activity android:name=".WebCommentActivity"></activity>
     </application>
 
 </manifest>

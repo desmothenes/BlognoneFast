@@ -3,6 +3,7 @@ buildscript {
         maven { url 'https://maven.fabric.io/public' }
     }
 
+    //noinspection GroovyAssignabilityCheck
     dependencies {
         classpath 'io.fabric.tools:gradle:1.21.4'
     }
@@ -16,24 +17,40 @@ repositories {
 
 
 android {
+    //noinspection GroovyAssignabilityCheck
+    signingConfigs {
+        config {
+            keyAlias 'channimit'
+            keyPassword 'blognonefast'
+            //noinspection GroovyAssignabilityCheck
+            storeFile file('../blognonefast.jks')
+            storePassword 'blognonefast'
+        }
+    }
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
-
     defaultConfig {
         applicationId "com.jolmagic.channimit.blognonefast"
         minSdkVersion 23
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+        signingConfig signingConfigs.config
     }
+    //noinspection GroovyAssignabilityCheck
     buildTypes {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
+    }
+    //noinspection GroovyAssignabilityCheck
+    productFlavors {
     }
 }
 
+//noinspection GroovyAssignabilityCheck
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
@@ -42,6 +59,7 @@ dependencies {
     compile 'com.einmalfel:earl:1.0.0'
     compile 'com.google.android.gms:play-services-appindexing:8.4.0'
     compile 'com.koushikdutta.ion:ion:2.1.6'
+    compile 'org.jsoup:jsoup:1.8.3'
     compile 'com.android.support:cardview-v7:23.2.0'
     compile 'com.android.support:recyclerview-v7:23.2.0'
     compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
