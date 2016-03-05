@@ -37,6 +37,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.jolmagic.channimit.blognonefast.NewsScrollingActivity" />
         </activity>
+        <activity android:name=".WebCommentActivity"></activity>
     </application>
 
 </manifest>

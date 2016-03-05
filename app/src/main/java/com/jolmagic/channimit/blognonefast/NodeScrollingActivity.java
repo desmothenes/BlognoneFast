@@ -5,7 +5,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -35,8 +34,9 @@ public class NodeScrollingActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent commentIntent = new Intent(getBaseContext(), WebCommentActivity.class);
+                commentIntent.putExtra("Link", intent.getStringExtra("Link"));
+                startActivity(commentIntent);
             }
         });
 
@@ -50,7 +50,9 @@ public class NodeScrollingActivity extends AppCompatActivity {
         final Handler handler = new Handler();
         new Thread(new Runnable() {
             public void run() {
-                final Spanned Description = Html.fromHtml(intent.getStringExtra("Description"), getImageHTML(), null);
+                final Spanned Description = Html.fromHtml(
+                        "<b><big>" + intent.getStringExtra("Title") + "</big></b>\n\n\n" +
+                                intent.getStringExtra("Description"), getImageHTML(), null);
                 handler.post(new Runnable(){
                     public void run() {
                         descView.setText(Description);

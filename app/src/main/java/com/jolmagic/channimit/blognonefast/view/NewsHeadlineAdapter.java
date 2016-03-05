@@ -71,7 +71,7 @@ public class NewsHeadlineAdapter extends RecyclerView.Adapter<NewsHeadlineAdapte
                 intent.putExtra("Title", news.getTitle());
                 intent.putExtra("Description", news.getDescription());
                 intent.putExtra("Author", news.getAuthor());
-                intent.putExtra("ImageLin", news.getImageLink());
+                intent.putExtra("ImageLink", news.getImageLink());
                 intent.putExtra("Link", news.getLink());
                 intent.putExtra("PublicationDate", news.getPublicationDate());
                 caller.getContext().startActivity(intent);
