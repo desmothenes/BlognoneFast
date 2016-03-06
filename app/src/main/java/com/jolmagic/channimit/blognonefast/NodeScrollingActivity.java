@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.TextView;
@@ -46,6 +47,7 @@ public class NodeScrollingActivity extends AppCompatActivity {
         intent = getIntent();
         setTitle(intent.getStringExtra("Title"));
         descView = (TextView) findViewById(R.id.desc_in_node_view);
+        descView.setMovementMethod(LinkMovementMethod.getInstance());
         descView.setText(Html.fromHtml(intent.getStringExtra("Description")));
 
         final Handler handler = new Handler();
