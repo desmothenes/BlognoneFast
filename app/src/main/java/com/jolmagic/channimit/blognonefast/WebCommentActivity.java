@@ -25,6 +25,7 @@ public class WebCommentActivity extends AppCompatActivity {
         setContentView(R.layout.activity_web_comment);
         webView = (WebView)findViewById(R.id.webView);
         webView.getSettings().setJavaScriptEnabled(true);
+        WebView.setWebContentsDebuggingEnabled(true);
         intent = getIntent();
 
         final Handler handler = new Handler();
@@ -34,7 +35,13 @@ public class WebCommentActivity extends AppCompatActivity {
                     Document doc = Jsoup.connect(intent.getStringExtra("Link")).get();
                     Element commentAreaElement = doc.getElementById("comment-area");
                     if (commentAreaElement != null) {
-                        final String commentArea = doc.head().html() + doc.getElementById("comment-area").html();
+                        final String commentArea = "<head>" +
+                                doc.head().html() +
+                                "<style type=\"text/css\">.comment-info{background:#4caf50;}</style>" +
+                                "</head>" +
+                                "<body style='background-color: white;'>" +
+                                doc.getElementById("comment-area").html() +
+                                "</body>";
                         handler.post(new Runnable() {
                             public void run() {
                                 webView.loadDataWithBaseURL(intent.getStringExtra("Link"), commentArea, "text/html", "UTF-8", "");
