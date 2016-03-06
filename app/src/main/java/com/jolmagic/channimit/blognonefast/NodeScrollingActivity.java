@@ -46,6 +46,7 @@ public class NodeScrollingActivity extends AppCompatActivity {
         intent = getIntent();
         setTitle(intent.getStringExtra("Title"));
         descView = (TextView) findViewById(R.id.desc_in_node_view);
+        descView.setText(Html.fromHtml(intent.getStringExtra("Description")));
 
         final Handler handler = new Handler();
         new Thread(new Runnable() {
