@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.Spanned;
@@ -13,15 +15,26 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.TextView;
 
+import com.einmalfel.earl.EarlParser;
+import com.einmalfel.earl.Feed;
+import com.jolmagic.channimit.blognonefast.view.NewsHeadlineAdapter;
+import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.ExecutionException;
+import java.util.zip.DataFormatException;
 
 public class NodeScrollingActivity extends AppCompatActivity {
 
     private Intent intent;
     private TextView descView;
+    private String url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +48,7 @@ public class NodeScrollingActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent commentIntent = new Intent(getBaseContext(), WebCommentActivity.class);
-                commentIntent.putExtra("Link", intent.getStringExtra("Link"));
+                commentIntent.putExtra("Link", url);
                 startActivity(commentIntent);
             }
         });
@@ -44,22 +57,56 @@ public class NodeScrollingActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         intent = getIntent();
-        setTitle(intent.getStringExtra("Title"));
         descView = (TextView) findViewById(R.id.desc_in_node_view);
 
-        final Handler handler = new Handler();
-        new Thread(new Runnable() {
-            public void run() {
-                final Spanned Description = Html.fromHtml(
-                        "<b><big>" + intent.getStringExtra("Title") + "</big></b>\n\n\n" +
-                                intent.getStringExtra("Description"), getImageHTML(), null);
-                handler.post(new Runnable(){
-                    public void run() {
-                        descView.setText(Description);
-                    }
-                });
-            }
-        }).start();
+        if (intent.getData() == null) {
+            setTitle(intent.getStringExtra("Title"));
+            url = intent.getStringExtra("Link");
+
+            final Handler handler = new Handler();
+            new Thread(new Runnable() {
+                public void run() {
+                    final Spanned Description = Html.fromHtml(
+                            "<b><big>" + intent.getStringExtra("Title") + "</big></b>\n\n\n" +
+                                    intent.getStringExtra("Description"), getImageHTML(), null);
+                    handler.post(new Runnable() {
+                        public void run() {
+                            descView.setText(Description);
+                        }
+                    });
+                }
+            }).start();
+        } else {
+            url = intent.getData().toString();
+            Ion.with(getBaseContext())
+                    .load(url)
+                    .asInputStream()
+                    .setCallback(new FutureCallback<InputStream>() {
+                        @Override
+                        public void onCompleted(Exception ignore, InputStream result) {
+                            try {
+                                final Document doc = Jsoup.parse(result, "UTF8", url);
+                                setTitle(doc.title());
+
+                                final Handler handler = new Handler();
+                                new Thread(new Runnable() {
+                                    public void run() {
+                                        final Spanned Description = Html.fromHtml(
+                                                "<b><big>" + doc.title() + "</big></b>\n\n\n" +
+                                                        doc.select(".node-content").first().html(), getImageHTML(), null);
+                                        handler.post(new Runnable() {
+                                            public void run() {
+                                                descView.setText(Description);
+                                            }
+                                        });
+                                    }
+                                }).start();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+        }
     }
 
     public Html.ImageGetter getImageHTML() {
