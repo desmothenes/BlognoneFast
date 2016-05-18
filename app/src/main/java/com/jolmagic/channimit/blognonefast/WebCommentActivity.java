@@ -33,7 +33,7 @@ public class WebCommentActivity extends AppCompatActivity {
                 try {
                     Document doc = Jsoup.connect(intent.getStringExtra("Link")).get();
                     Element commentAreaElement = doc.getElementById("comment-area");
-                    if (commentAreaElement != null) {
+                    if (commentAreaElement != null && commentAreaElement.children().size() > 0) {
                         final String commentArea = doc.head().html() + doc.getElementById("comment-area").html();
                         handler.post(new Runnable() {
                             public void run() {
