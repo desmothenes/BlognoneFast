@@ -33,11 +33,23 @@
             android:label="@string/title_activity_node_scrolling"
             android:parentActivityName=".NewsScrollingActivity"
             android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="www.blognone.com"
+                    android:pathPattern=".*"
+                    android:scheme="https" />
+            </intent-filter>
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.jolmagic.channimit.blognonefast.NewsScrollingActivity" />
         </activity>
-        <activity android:name=".WebCommentActivity"></activity>
+        <activity android:name=".WebCommentActivity" />
     </application>
 
 </manifest>
