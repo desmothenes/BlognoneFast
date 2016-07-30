@@ -124,10 +124,9 @@ public class NodeScrollingActivity extends AppCompatActivity {
                 Drawable drawable = null;
                 try {
                     float multipleSize = 1.0f;
-                    int density= getResources().getDisplayMetrics().densityDpi;
+                    int density = getResources().getDisplayMetrics().densityDpi;
 
-                    switch(density)
-                    {
+                    switch (density) {
                         case DisplayMetrics.DENSITY_LOW:
                             multipleSize = 0.75f;
                             break;
@@ -153,8 +152,8 @@ public class NodeScrollingActivity extends AppCompatActivity {
                     drawable.setBounds(
                             0,
                             0,
-                            (int)(drawable.getIntrinsicWidth() * multipleSize),
-                            (int)(drawable.getIntrinsicHeight() * multipleSize)
+                            (int) (drawable.getIntrinsicWidth() * multipleSize),
+                            (int) (drawable.getIntrinsicHeight() * multipleSize)
                     );
                 } catch (InterruptedException | ExecutionException e) {
                     e.printStackTrace();
