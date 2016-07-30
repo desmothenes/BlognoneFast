@@ -13,7 +13,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
         android:text="@string/loading"
-        android:id="@+id/desc_in_node_view"
-        android:contextClickable="true" />
+        android:id="@+id/desc_in_node_view" />
 
 </android.support.v4.widget.NestedScrollView>

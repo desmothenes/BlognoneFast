@@ -18,4 +18,10 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="AppTheme.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:singleLine">false</item>
+        <item name="android:ellipsize">marquee</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+
 </resources>
